@@ -1,0 +1,21 @@
+<div class="confirmation-container">
+  <h2>Booking Confirmed!</h2>
+  
+  <div class="details-section">
+    <h3>Account Details</h3>
+    <p>Name: {{ userDetails.firstName }} {{ userDetails.lastName }}</p>
+    <p>Email: {{ userDetails.email }}</p>
+  </div>
+  
+  <div class="details-section">
+    <h3>Booking Details</h3>
+    <p>Location: {{ bookingDetails.location }}</p>
+    <p>Date: {{ bookingDetails.date | date }}</p>
+    <p>Time: {{ bookingDetails.time }}</p>
+    <p>Service: {{ bookingDetails.serviceRequired }}</p>
+  </div>
+
+  <button mat-raised-button color="primary" (click)="downloadAndClear()">
+    Download Booking Details
+  </button>
+</div>

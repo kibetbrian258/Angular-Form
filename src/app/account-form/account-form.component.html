@@ -1,0 +1,126 @@
+<!-- account-form.component.html -->
+<div class="form-container">
+  <mat-horizontal-stepper #stepper [linear]="true" class="mat-elevation-z4">
+    <mat-step
+      [stepControl]="accountForm"
+      label="Create Account"
+      state="account"
+    >
+      <form
+        [formGroup]="accountForm"
+        (ngSubmit)="onSubmit()"
+        class="form-content"
+      >
+        <div class="form-fields-container">
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input
+                matInput
+                formControlName="firstName"
+                placeholder="Enter your first name"
+                required
+              />
+              <mat-error
+                *ngIf="accountForm.get('firstName')?.hasError('required')"
+              >
+                First name is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input
+                matInput
+                formControlName="lastName"
+                placeholder="Enter your last name"
+                required
+              />
+              <mat-error
+                *ngIf="accountForm.get('lastName')?.hasError('required')"
+              >
+                Last name is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input
+                matInput
+                formControlName="email"
+                placeholder="Enter your email"
+                type="email"
+                required
+              />
+              <mat-error *ngIf="accountForm.get('email')?.hasError('required')">
+                Email is required
+              </mat-error>
+              <mat-error *ngIf="accountForm.get('email')?.hasError('email')">
+                Please enter a valid email address
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <input
+                matInput
+                formControlName="password"
+                type="password"
+                placeholder="Enter your password"
+                required
+              />
+              <mat-error
+                *ngIf="accountForm.get('password')?.hasError('required')"
+              >
+                Password is required
+              </mat-error>
+              <mat-error
+                *ngIf="accountForm.get('password')?.hasError('minlength')"
+              >
+                Password must be at least 6 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>Confirm Password</mat-label>
+              <input
+                matInput
+                formControlName="confirmPassword"
+                type="password"
+                placeholder="Confirm your password"
+                required
+              />
+              <mat-error
+                *ngIf="accountForm.get('confirmPassword')?.hasError('required')"
+              >
+                Please confirm your password
+              </mat-error>
+              <mat-error *ngIf="accountForm.hasError('mismatch')">
+                Passwords do not match
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="button-container">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!accountForm.valid"
+          >
+            Create Account
+          </button>
+        </div>
+      </form>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>
