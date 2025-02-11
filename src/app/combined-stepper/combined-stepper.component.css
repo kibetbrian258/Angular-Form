@@ -59,6 +59,15 @@ mat-form-field {
   top: -1.25em;
 }
 
+::ng-deep .mat-horizontal-stepper {
+  margin-bottom: 2rem; /* Adds spacing between the stepper and the form */
+}
+
+/* Add some spacing at the top of form fields */
+.form-fields-container {
+  margin-top: 1.5rem; /* Adjust this value as needed */
+}
+
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
   padding: 0.5em 0;
 }
@@ -111,7 +120,6 @@ mat-form-field {
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-label {
   margin-top: -0.5em;
 }
-
 
 ::ng-deep input.mat-input-element {
   font-size: 1rem;
