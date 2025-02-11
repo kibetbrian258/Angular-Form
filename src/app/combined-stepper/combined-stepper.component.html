@@ -1,16 +1,13 @@
-<!-- account-form.component.html -->
+<!-- combined-stepper.component.html -->
 <div class="form-container">
   <mat-horizontal-stepper #stepper [linear]="true" class="mat-elevation-z4">
+    <!-- Step 1: Account Creation -->
     <mat-step
       [stepControl]="accountForm"
       label="Create Account"
       state="account"
     >
-      <form
-        [formGroup]="accountForm"
-        (ngSubmit)="onSubmit()"
-        class="form-content"
-      >
+      <form [formGroup]="accountForm" (ngSubmit)="onAccountSubmit()">
         <div class="form-fields-container">
           <div class="form-field">
             <mat-form-field appearance="outline">
@@ -114,10 +111,104 @@
           <button
             mat-raised-button
             color="primary"
-            type="submit"
+            matStepperNext
             [disabled]="!accountForm.valid"
           >
-            Create Account
+            Next
+          </button>
+        </div>
+      </form>
+    </mat-step>
+
+    <!-- Step 2: Booking -->
+    <mat-step
+      [stepControl]="bookingForm"
+      label="Booking Service"
+      state="booking"
+    >
+      <form [formGroup]="bookingForm" (ngSubmit)="onBookingSubmit()">
+        <div class="form-fields-container">
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>Location</mat-label>
+              <input
+                matInput
+                formControlName="location"
+                placeholder="Enter your location"
+                required
+              />
+              <mat-error
+                *ngIf="bookingForm.get('location')?.hasError('required')"
+              >
+                Location is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>Time</mat-label>
+              <input
+                matInput
+                type="time"
+                formControlName="time"
+                placeholder="Select time"
+                required
+              />
+              <mat-error *ngIf="bookingForm.get('time')?.hasError('required')">
+                Time is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>Date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                formControlName="date"
+                placeholder="Select date"
+                required
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="bookingForm.get('date')?.hasError('required')">
+                Date is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>Service Required</mat-label>
+              <input
+                matInput
+                formControlName="serviceRequired"
+                placeholder="Enter service needed"
+                required
+              />
+              <mat-error
+                *ngIf="bookingForm.get('serviceRequired')?.hasError('required')"
+              >
+                Service required is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="button-container">
+          <button mat-button matStepperPrevious>Back</button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!bookingForm.valid"
+          >
+            Submit Booking
           </button>
         </div>
       </form>

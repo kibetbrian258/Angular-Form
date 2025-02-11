@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,18 +9,13 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { AccountFormComponent } from './account-form/account-form.component';
-import { BookingFormComponent } from './booking-form/booking-form.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { CombinedStepperComponent } from './combined-stepper/combined-stepper.component';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    AccountFormComponent,
-    BookingFormComponent,
-    ConfirmationComponent,
-  ],
+  declarations: [AppComponent, ConfirmationComponent, CombinedStepperComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -32,11 +26,11 @@ import { RouterModule } from '@angular/router';
     MatButtonModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatFormFieldModule,
     RouterModule.forRoot([
-      { path: 'create-account', component: AccountFormComponent },
-      { path: 'booking', component: BookingFormComponent },
+      { path: 'combined-form', component: CombinedStepperComponent },
       { path: 'confirmation', component: ConfirmationComponent },
-      { path: '', redirectTo: 'create-account', pathMatch: 'full' },
+      { path: '', redirectTo: 'combined-form', pathMatch: 'full' },
     ]),
   ],
   providers: [],

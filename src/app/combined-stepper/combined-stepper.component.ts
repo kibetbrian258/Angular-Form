@@ -1,13 +1,12 @@
-// account-form.component.ts
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
-  selector: 'app-account-form',
-  templateUrl: './account-form.component.html',
-  styleUrls: ['./account-form.component.css'],
+  selector: 'app-combined-stepper',
+  templateUrl: './combined-stepper.component.html',
+  styleUrls: ['./combined-stepper.component.css'],
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
@@ -15,8 +14,9 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
     },
   ],
 })
-export class AccountFormComponent {
+export class CombinedStepperComponent {
   accountForm: FormGroup;
+  bookingForm: FormGroup;
   isEditable = true;
 
   constructor(private fb: FormBuilder, private router: Router) {
@@ -30,6 +30,13 @@ export class AccountFormComponent {
       },
       { validator: this.passwordMatchValidator }
     );
+
+    this.bookingForm = this.fb.group({
+      location: ['', Validators.required],
+      time: ['', Validators.required],
+      date: ['', Validators.required],
+      serviceRequired: ['', Validators.required],
+    });
   }
 
   passwordMatchValidator(g: FormGroup) {
@@ -39,13 +46,22 @@ export class AccountFormComponent {
     return password.value === confirmPassword.value ? null : { mismatch: true };
   }
 
-  onSubmit() {
+  onAccountSubmit() {
     if (this.accountForm.valid) {
       localStorage.setItem(
         'userDetails',
         JSON.stringify(this.accountForm.value)
       );
-      this.router.navigate(['booking']);
+    }
+  }
+
+  onBookingSubmit() {
+    if (this.bookingForm.valid) {
+      localStorage.setItem(
+        'bookingDetails',
+        JSON.stringify(this.bookingForm.value)
+      );
+      this.router.navigate(['confirmation']);
     }
   }
 }

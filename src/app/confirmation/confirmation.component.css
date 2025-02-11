@@ -1,0 +1,69 @@
+/* confirmation.component.css */
+.confirmation-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+h2 {
+  color: #673ab7;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.details-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #f8f6ff;
+  border-radius: 6px;
+  border-left: 4px solid #673ab7;
+}
+
+.details-section h3 {
+  color: #673ab7;
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.details-section p {
+  margin: 0.5rem 0;
+  color: #444;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+button {
+  display: block;
+  margin: 2rem auto 0;
+  padding: 0.75rem 1.5rem;
+  background-color: #673ab7 !important;
+  color: white !important;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #5e35b1 !important;
+  box-shadow: 0 2px 4px rgba(103, 58, 183, 0.3);
+}
+
+/* Optional: Add a subtle animation when the component loads */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.confirmation-container {
+  animation: fadeIn 0.5s ease-out;
+}
