@@ -1,0 +1,129 @@
+.navbar {
+  background-color: #673ab7;
+  padding: 0.5rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 4.3rem;
+  width: auto;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 200;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.nav-links a:hover {
+  opacity: 0.8;
+  cursor: pointer;
+  transform: translateY(-2px);
+}
+
+.nav-links a.active {
+  border-bottom: 2px solid white;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.bar {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px auto;
+  background-color: white;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: block;
+    z-index: 1001;
+  }
+
+  .logo {
+    height: 3.3rem;
+    width: auto;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: #673ab7;
+    padding: 1rem;
+    gap: 2.5rem;
+    transform-origin: top;
+    display: none;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .nav-links a:hover {
+    transform: translateY(-1.2px);
+  }
+
+  .mobile-menu-btn.active .bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-btn.active .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .mobile-menu-btn.active .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 769px) {
+  .nav-links {
+    display: flex !important;
+    position: static;
+    transform: none !important;
+    opacity: 1 !important;
+    flex-direction: row;
+    background-color: transparent;
+    padding: 0;
+  }
+}

@@ -1,0 +1,149 @@
+.privacy-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  color: #333;
+  font-family: "Arial", sans-serif;
+}
+
+.privacy-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid #673ab7;
+}
+
+.privacy-header h1 {
+  color: #673ab7;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.last-updated {
+  color: #666;
+  font-style: italic;
+}
+
+.privacy-content {
+  line-height: 1.6;
+}
+
+.privacy-section {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.privacy-section:last-child {
+  border-bottom: none;
+}
+
+.privacy-section h2 {
+  color: #673ab7;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.privacy-section h3 {
+  color: #9c27b0;
+  font-size: 1.4rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.privacy-section p {
+  margin-bottom: 1rem;
+}
+
+.privacy-section ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.privacy-section ul li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.info-card {
+  background: #f8f4ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #673ab7;
+}
+
+.info-card h4 {
+  color: #673ab7;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.rights-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.right-item {
+  text-align: center;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(103, 58, 183, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.right-item:hover {
+  transform: translateY(-5px);
+}
+
+.right-item h4 {
+  color: #673ab7;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.contact-info {
+  background: #f8f4ff;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.contact-info p {
+  margin: 0.5rem 0;
+  color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .privacy-container {
+    padding: 1rem;
+  }
+
+  .privacy-header h1 {
+    font-size: 2rem;
+  }
+
+  .privacy-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .privacy-section h3 {
+    font-size: 1.2rem;
+  }
+
+  .info-grid,
+  .rights-container {
+    grid-template-columns: 1fr;
+  }
+}

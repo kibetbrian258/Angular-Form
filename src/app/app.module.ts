@@ -13,9 +13,40 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { CombinedStepperComponent } from './combined-stepper/combined-stepper.component';
 import { RouterModule } from '@angular/router';
+import { HomepageComponent } from './homepage/homepage.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { AboutComponent } from './about/about.component';
+import { ServicesComponent } from './services/services.component';
+import { CarouselComponent } from './carousel/carousel.component';
+import { FooterComponent } from './footer/footer.component';
+import { TermsComponent } from './terms/terms.component';
+import { MatIconModule } from '@angular/material/icon';
+import { LoginComponent } from './login/login.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { HttpClientModule } from '@angular/common/http';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
-  declarations: [AppComponent, ConfirmationComponent, CombinedStepperComponent],
+  declarations: [
+    AppComponent,
+    ConfirmationComponent,
+    CombinedStepperComponent,
+    HomepageComponent,
+    NavbarComponent,
+    AboutComponent,
+    ServicesComponent,
+    CarouselComponent,
+    FooterComponent,
+    TermsComponent,
+    LoginComponent,
+    PrivacyPolicyComponent,
+    CustomSnackbarComponent,
+    ConfirmDialogComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -27,11 +58,12 @@ import { RouterModule } from '@angular/router';
     MatDatepickerModule,
     MatNativeDateModule,
     MatFormFieldModule,
-    RouterModule.forRoot([
-      { path: 'combined-form', component: CombinedStepperComponent },
-      { path: 'confirmation', component: ConfirmationComponent },
-      { path: '', redirectTo: 'combined-form', pathMatch: 'full' },
-    ]),
+    RouterModule,
+    MatIconModule,
+    HttpClientModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

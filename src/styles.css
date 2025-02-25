@@ -1,61 +1,57 @@
-/* 
-
-html,
-body {
-  height: 100%;
-}
-body {
+body,
+html {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-
-.form-container {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.form-field {
-  margin-bottom: 1rem;
-}
-
-mat-form-field {
+  padding: 0;
   width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
+/* For WebKit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  display: none;
+}
 
-button[type="submit"] {
-  background-color: #9c27b0;
-  color: white;
+/* For Firefox */
+* {
+  scrollbar-width: none;
+}
+
+/* For IE and Edge */
+* {
+  -ms-overflow-style: none;
+}
+
+app-root {
+  display: block;
   width: 100%;
-  padding: 1rem;
-  margin-top: 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  min-height: 100%;
 }
 
-button[type="submit"]:hover {
-  background-color: #7b1fa2;
+/* Add these global styles for snackbar positioning and animations */
+
+/* Override Material's snackbar container */
+.modern-snackbar {
+  margin: 16px !important;
 }
 
-.confirmation-container {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* Improve snackbar appearance in the document body */
+.mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: transparent !important;
+  --mat-mdc-snack-bar-button-color: white;
+  --mdc-snackbar-supporting-text-color: white;
+  box-shadow: none !important;
 }
 
-.details-section {
-  margin-bottom: 2rem;
+/* Remove Material's default padding */
+.mdc-snackbar__surface {
+  padding: 0 !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
-h2,
-h3 {
-  color: #9c27b0;
-} */
+/* Override MDC styles */
+.mdc-snackbar__label {
+  padding: 0 !important;
+}

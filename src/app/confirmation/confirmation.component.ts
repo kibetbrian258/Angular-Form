@@ -144,7 +144,7 @@ export class ConfirmationComponent implements OnInit {
 
     // Redirect to create account page
     setTimeout(() => {
-      this.router.navigate(['/combined-form']);
+      this.router.navigate(['/homepage']);
     }, 1000);
   }
 }

@@ -1,0 +1,156 @@
+.footer {
+  background: linear-gradient(to right, #673ab7, #9c27b0);
+  color: white;
+  padding: 0;
+  font-family: "Arial", sans-serif;
+  margin-top: 2rem;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  padding: 2.5rem 4rem;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.footer-section h3 {
+  color: white;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.footer-section h3::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  height: 2px;
+  background-color: white;
+}
+
+.footer-section p {
+  line-height: 1.6;
+  margin: 0;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.footer-section ul li:hover {
+  transform: translateX(5px);
+}
+
+.hours-list li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.hours-list li span {
+  font-weight: bold;
+  margin-right: 1rem;
+}
+
+.contact-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.contact-list li i {
+  margin-right: 1rem;
+  color: white;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.social-icon {
+  background-color: rgba(255, 255, 255, 0.1);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  background-color: white;
+  color: #673ab7;
+  transform: translateY(-3px);
+}
+
+.footer-bottom {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 1.5rem 6rem;
+}
+
+.footer-bottom-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.footer-links a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .footer-top {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 4rem 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-top {
+    grid-template-columns: 1fr;
+    padding: 3rem 2rem;
+  }
+
+  .footer-bottom {
+    padding: 1.5rem 2rem;
+  }
+
+  .footer-bottom-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

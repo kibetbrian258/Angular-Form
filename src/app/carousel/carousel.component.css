@@ -1,0 +1,144 @@
+.testimonial-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.testimonial-header h2 {
+  color: #673ab7;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.testimonial-header p {
+  color: #666;
+  font-size: 1.1rem;
+  margin: 0;
+}
+.carousel-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+}
+
+.testimonial-carousel {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+.testimonial-content {
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.testimonial-image {
+  flex-shrink: 0;
+}
+
+.testimonial-image img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #673ab7;
+}
+
+.testimonial-text {
+  flex-grow: 1;
+}
+
+.testimonial-text .content {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.testimonial-text .name {
+  font-size: 1.2rem;
+  color: #673ab7;
+  margin: 0;
+}
+
+.testimonial-text .role {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.carousel-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.5rem;
+  gap: 1rem;
+}
+
+.nav-button {
+  background: #673ab7;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.nav-button:hover {
+  background: #5829a7;
+}
+
+.nav-button {
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ddd;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dot.active {
+  background: #673ab7;
+}
+
+.dot:hover {
+  background: #5829a7;
+}
+
+/* Add responsive styles */
+@media screen and (max-width: 768px) {
+  .testimonial-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .carousel-container {
+    padding: 1rem;
+  }
+
+  .testimonial-text .content {
+    font-size: 1rem;
+  }
+}

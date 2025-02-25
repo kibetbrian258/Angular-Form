@@ -78,7 +78,8 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "src/styles.css",
-              "@angular/material/prebuilt-themes/purple-green.css"
+              "@angular/material/prebuilt-themes/purple-green.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
             ],
             "scripts": []
           }

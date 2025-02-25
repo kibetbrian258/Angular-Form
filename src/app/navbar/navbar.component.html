@@ -1,0 +1,33 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <img src="../../assets/Logo.jpg" alt="Logo" class="logo" />
+    </div>
+
+    <button
+      class="mobile-menu-btn"
+      [class.active]="isMenuActive"
+      (click)="toggleMenu($event)"
+    >
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+
+    <div
+      class="nav-links"
+      [class.active]="isMenuActive"
+      [@menuAnimation]="isMobile ? (isMenuActive ? 'open' : 'closed') : 'open'"
+    >
+      <a (click)="scrollToSection('homepage')" class="cursor-pointer">Home</a>
+      <a (click)="scrollToSection('about')" class="cursor-pointer">About</a>
+      <a (click)="scrollToSection('services')" class="cursor-pointer"
+        >Services</a
+      >
+      <a (click)="scrollToSection('testimonials')" class="cursor-pointer"
+        >Testimonials</a
+      >
+      <a routerLink="/login" routerLinkActive="active">Login</a>
+    </div>
+  </div>
+</nav>

@@ -6,6 +6,7 @@
       [stepControl]="accountForm"
       label="Create Account"
       state="account"
+      [completed]="registrationComplete"
     >
       <form [formGroup]="accountForm" (ngSubmit)="onAccountSubmit()">
         <div class="form-fields-container">
@@ -111,10 +112,15 @@
           <button
             mat-raised-button
             color="primary"
-            matStepperNext
-            [disabled]="!accountForm.valid"
+            type="submit"
+            [disabled]="!accountForm.valid || isLoading"
           >
-            Next
+            <mat-spinner
+              *ngIf="isLoading"
+              diameter="20"
+              class="spinner-button"
+            ></mat-spinner>
+            <span *ngIf="!isLoading">Create Account</span>
           </button>
         </div>
       </form>
@@ -201,14 +207,25 @@
         </div>
 
         <div class="button-container">
-          <button mat-button matStepperPrevious>Back</button>
+          <button
+            mat-button
+            (click)="onBackButtonClick($event)"
+            [disabled]="isLoading"
+          >
+            Back
+          </button>
           <button
             mat-raised-button
             color="primary"
             type="submit"
-            [disabled]="!bookingForm.valid"
+            [disabled]="!bookingForm.valid || isLoading"
           >
-            Submit Booking
+            <mat-spinner
+              *ngIf="isLoading"
+              diameter="20"
+              class="spinner-button"
+            ></mat-spinner>
+            <span *ngIf="!isLoading">Submit Booking</span>
           </button>
         </div>
       </form>

@@ -1,0 +1,11 @@
+<div class="custom-snackbar">
+  <div class="snackbar-icon">
+    <mat-icon>{{ data.icon }}</mat-icon>
+  </div>
+  <div class="snackbar-message">{{ data.message }}</div>
+  <div class="snackbar-action" *ngIf="data.action">
+    <button mat-button (click)="snackBarRef.dismissWithAction()">
+      {{ data.action }}
+    </button>
+  </div>
+</div>

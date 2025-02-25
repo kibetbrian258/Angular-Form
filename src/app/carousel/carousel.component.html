@@ -1,0 +1,35 @@
+<div class="carousel-container" id="testimonials">
+  <div class="testimonial-header">
+    <h2>What Our Clients Say</h2>
+    <p>Real experiences from our beloved customers</p>
+  </div>
+  <div class="testimonial-carousel" [@slideAnimation]="currentIndex">
+    <div class="testimonial-content">
+      <div class="testimonial-image">
+        <img
+          [src]="testimonials[currentIndex].image"
+          [alt]="testimonials[currentIndex].name"
+        />
+      </div>
+      <div class="testimonial-text">
+        <p class="content">{{ testimonials[currentIndex].content }}</p>
+        <h3 class="name">{{ testimonials[currentIndex].name }}</h3>
+        <p class="role">{{ testimonials[currentIndex].role }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="carousel-controls">
+    <button class="nav-button prev" (click)="previous()">&lt;</button>
+    <div class="dots">
+      <span
+        *ngFor="let t of testimonials; let i = index"
+        class="dot"
+        [class.active]="i === currentIndex"
+        (click)="goToSlide(i)"
+      >
+      </span>
+    </div>
+    <button class="nav-button next" (click)="next()">&gt;</button>
+  </div>
+</div>
