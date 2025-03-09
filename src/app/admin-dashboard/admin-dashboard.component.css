@@ -1,0 +1,61 @@
+.admin-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-sidenav-container {
+  flex: 1;
+}
+
+.admin-sidenav {
+  width: 250px;
+  background-color: #f5f5f5;
+  border-right: 1px solid #e0e0e0;
+}
+
+.admin-header {
+  padding: 16px;
+  background-color: #673ab7;
+  color: white;
+  text-align: center;
+}
+
+.admin-user {
+  font-size: 0.9rem;
+  margin-top: 5px;
+  opacity: 0.9;
+}
+
+.admin-content {
+  padding: 20px;
+  background-color: #fafafa;
+}
+
+.active {
+  background-color: rgba(103, 58, 183, 0.1);
+  color: #673ab7;
+  border-left: 3px solid #673ab7;
+}
+
+mat-nav-list a {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 16px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+mat-nav-list a:hover {
+  background-color: rgba(103, 58, 183, 0.05);
+}
+
+mat-nav-list a mat-icon {
+  margin-right: 16px;
+  color: #673ab7;
+}
+
+mat-divider {
+  margin: 8px 0;
+}

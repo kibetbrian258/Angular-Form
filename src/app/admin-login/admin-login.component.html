@@ -1,0 +1,89 @@
+<div class="admin-login-container">
+  <div class="admin-login-card mat-elevation-z4">
+    <div class="admin-logo">
+      <mat-icon>admin_panel_settings</mat-icon>
+    </div>
+
+    <div class="admin-header">
+      <h2>Admin Portal</h2>
+      <p class="subtitle">Sign in with administrative credentials</p>
+    </div>
+
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      class="admin-login-form"
+    >
+      <div class="form-field">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            formControlName="email"
+            placeholder="Enter your admin email"
+            type="email"
+            required
+          />
+          <mat-icon matPrefix>email</mat-icon>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+            Email is required
+          </mat-error>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+            Please enter a valid email address
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Enter your password"
+            required
+          />
+          <mat-icon matPrefix>lock</mat-icon>
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="togglePasswordVisibility()"
+          >
+            <mat-icon>{{
+              showPassword ? "visibility_off" : "visibility"
+            }}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            Password is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="loginForm.invalid || isLoading"
+          class="admin-login-button"
+        >
+          <mat-spinner
+            *ngIf="isLoading"
+            diameter="20"
+            class="spinner-button"
+          ></mat-spinner>
+          <span *ngIf="!isLoading">Sign In</span>
+        </button>
+      </div>
+    </form>
+
+    <div class="back-link">
+      <a routerLink="/">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Main Site
+      </a>
+    </div>
+  </div>
+</div>

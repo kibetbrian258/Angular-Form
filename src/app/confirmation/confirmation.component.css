@@ -38,18 +38,48 @@ h2 {
   line-height: 1.5;
 }
 
-button {
-  display: block;
-  margin: 2rem auto 0;
+/* New button container with flexbox spacing */
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+/* Style for both buttons */
+.button-container button {
   padding: 0.75rem 1.5rem;
   background-color: #673ab7 !important;
   color: white !important;
   transition: background-color 0.3s ease;
+  min-width: 150px;
 }
 
-button:hover {
+.button-container button:hover {
   background-color: #5e35b1 !important;
   box-shadow: 0 2px 4px rgba(103, 58, 183, 0.3);
+}
+
+/* Add some space between icon and text */
+.button-container button mat-icon {
+  margin-right: 8px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+}
+
+.error-container {
+  text-align: center;
+  padding: 30px;
+}
+
+.error-container button {
+  margin: 10px;
 }
 
 /* Optional: Add a subtle animation when the component loads */
@@ -66,4 +96,16 @@ button:hover {
 
 .confirmation-container {
   animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 480px) {
+  .button-container {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .button-container button {
+    width: 100%;
+  }
 }

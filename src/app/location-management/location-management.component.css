@@ -1,0 +1,143 @@
+/* location-management.component.css */
+.location-management {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.form-card {
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.location-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-row {
+  margin-bottom: 15px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.status-toggle {
+  margin: 15px 0;
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.button-spinner {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.locations-list {
+  margin-top: 30px;
+}
+
+.locations-list h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.locations-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.address-cell {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.actions-container {
+  display: flex;
+  gap: 5px;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.active {
+  background-color: #e6f7e6;
+  color: #2e7d32;
+}
+
+.inactive {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px 0;
+  color: #666;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .location-management {
+    padding: 15px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+
+  .locations-table .mat-header-cell,
+  .locations-table .mat-cell {
+    padding: 10px 8px;
+  }
+
+  /* Optimize table for mobile */
+  .mat-column-address {
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Further optimize for very small screens */
+  .locations-table .mat-header-cell,
+  .locations-table .mat-cell {
+    padding: 8px 4px;
+    font-size: 0.85rem;
+  }
+
+  /* Potentially hide less important columns on very small screens */
+  .mat-column-address {
+    display: none;
+  }
+}

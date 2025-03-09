@@ -55,3 +55,181 @@ app-root {
 .mdc-snackbar__label {
   padding: 0 !important;
 }
+
+/* For both components - updated with primary color #673ab7 */
+.open-day-management,
+.service-availability-management {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.form-card {
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.open-day-form,
+.availability-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  flex: 1;
+  min-width: 200px;
+}
+
+.status-toggle {
+  display: flex;
+  align-items: center;
+  height: 56px; /* Match height with mat-form-field */
+  margin: 0 15px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.button-spinner {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.open-days-list,
+.availabilities-list {
+  margin-top: 30px;
+}
+
+.open-days-list h2,
+.availabilities-list h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #673ab7;
+  font-weight: 500;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.open-days-table,
+.availabilities-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.open-days-table th,
+.availabilities-table th {
+  background-color: rgba(103, 58, 183, 0.1);
+  color: #673ab7;
+  font-weight: 500;
+}
+
+.notes-cell {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.actions-container {
+  display: flex;
+  gap: 5px;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.active {
+  background-color: rgba(103, 58, 183, 0.15);
+  color: #673ab7;
+}
+
+.inactive {
+  background-color: rgba(244, 67, 54, 0.15);
+  color: #f44336;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px 0;
+  color: #666;
+  background-color: rgba(103, 58, 183, 0.05);
+  border-radius: 4px;
+  margin-top: 20px;
+}
+
+.mat-card-title {
+  color: #673ab7;
+}
+
+/* Style mat-table rows on hover */
+.mat-row:hover {
+  background-color: rgba(103, 58, 183, 0.04);
+}
+
+/* Style toggle buttons */
+.mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-thumb {
+  background-color: #673ab7;
+}
+
+.mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-bar {
+  background-color: rgba(103, 58, 183, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .open-day-management,
+  .service-availability-management {
+    padding: 15px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+
+  .status-toggle {
+    margin: 0;
+  }
+}

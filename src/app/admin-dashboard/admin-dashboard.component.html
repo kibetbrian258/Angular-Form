@@ -1,0 +1,49 @@
+<div class="admin-container">
+  <mat-drawer-container class="admin-sidenav-container">
+    <mat-drawer mode="side" opened class="admin-sidenav">
+      <div class="admin-header">
+        <h2>Admin Panel</h2>
+        <div
+          class="admin-user"
+          *ngIf="adminAuthService.currentAdmin | async as user"
+        >
+          <span>{{ user.firstName }} {{ user.lastName }}</span>
+        </div>
+      </div>
+      <mat-nav-list>
+        <a mat-list-item routerLink="/admin/services" routerLinkActive="active">
+          <mat-icon>spa</mat-icon> Services
+        </a>
+
+        <a mat-list-item routerLink="/admin/bookings" routerLinkActive="active">
+          <mat-icon>book</mat-icon> Bookings
+        </a>
+        <a mat-list-item routerLink="/admin/users" routerLinkActive="active">
+          <mat-icon>people</mat-icon> Users
+        </a>
+        <a
+          mat-list-item
+          routerLink="/admin/locations"
+          routerLinkActive="active"
+        >
+          <mat-icon>location_on</mat-icon> Locations
+        </a>
+        <a
+          mat-list-item
+          routerLink="/admin/service-availability"
+          routerLinkActive="active"
+        >
+          <mat-icon>event_available</mat-icon> Service Availability
+        </a>
+        <mat-divider></mat-divider>
+        <a mat-list-item (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon> Logout
+        </a>
+      </mat-nav-list>
+    </mat-drawer>
+
+    <mat-drawer-content class="admin-content">
+      <router-outlet></router-outlet>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>

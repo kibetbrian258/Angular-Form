@@ -1,21 +1,59 @@
 <div class="confirmation-container">
-  <h2>Booking Confirmed!</h2>
-  
-  <div class="details-section">
-    <h3>Account Details</h3>
-    <p>Name: {{ userDetails.firstName }} {{ userDetails.lastName }}</p>
-    <p>Email: {{ userDetails.email }}</p>
-  </div>
-  
-  <div class="details-section">
-    <h3>Booking Details</h3>
-    <p>Location: {{ bookingDetails.location }}</p>
-    <p>Date: {{ bookingDetails.date | date }}</p>
-    <p>Time: {{ bookingDetails.time }}</p>
-    <p>Service: {{ bookingDetails.serviceRequired }}</p>
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading your booking details...</p>
   </div>
 
-  <button mat-raised-button color="primary" (click)="downloadAndClear()">
-    Download Booking Details
-  </button>
+  <div *ngIf="!isLoading && !error">
+    <h2>Booking Confirmed!</h2>
+
+    <div class="details-section">
+      <h3>Account Details</h3>
+      <p>Name: {{ userDetails.firstName }} {{ userDetails.lastName }}</p>
+      <p>Email: {{ userDetails.email }}</p>
+    </div>
+
+    <div class="details-section">
+      <h3>Booking Details</h3>
+      <p>Location: {{ bookingDetails.location }}</p>
+      <p>Date: {{ bookingDetails.date | date }}</p>
+      <p>Time: {{ bookingDetails.time }}</p>
+      <p>Service: {{ bookingDetails.serviceRequired }}</p>
+    </div>
+
+    <div class="button-container">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="downloadAndClear()"
+        matTooltip="Download Booking Details"
+      >
+        <mat-icon>download</mat-icon>
+        Download
+      </button>
+
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="router.navigate(['/user-bookings'])"
+      >
+        <mat-icon>list</mat-icon>
+        View All Bookings
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && error" class="error-container">
+    <h2>Something went wrong</h2>
+    <p>
+      We couldn't load your booking details. Please try again or contact
+      support.
+    </p>
+    <button mat-raised-button color="primary" (click)="loadData()">
+      Try Again
+    </button>
+    <button mat-button (click)="router.navigate(['/homepage'])">
+      Return to Homepage
+    </button>
+  </div>
 </div>

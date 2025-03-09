@@ -153,6 +153,32 @@ input.error {
   color: white;
 }
 
+/* Add these spinner styles to your login.component.css */
+
+.spinner-button {
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* Center the button text when spinner is shown */
+.login-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Improve focus styles for better accessibility */
+input:focus,
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(103, 58, 183, 0.3);
+}
+
+.login-form {
+  margin-bottom: 1rem;
+}
+
 @media (max-width: 480px) {
   .login-card {
     padding: 1.5rem;

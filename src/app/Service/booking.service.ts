@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -26,18 +26,16 @@ export class BookingService {
   constructor(private http: HttpClient) {}
 
   createBooking(bookingData: BookingRequestDTO): Observable<Booking> {
-    const userId = localStorage.getItem('userId');
-
-    // Set the User-id header for the request
-    const headers = new HttpHeaders({
-      'User-id': userId || '',
-    });
-
-    return this.http.post<Booking>(this.apiUrl, bookingData, { headers });
+    // No need to manually set headers - JWT interceptor will handle this
+    return this.http.post<Booking>(this.apiUrl, bookingData);
   }
 
   getUserBookings(): Observable<Booking[]> {
-    const userId = localStorage.getItem('userId');
-    return this.http.get<Booking[]>(`${this.apiUrl}/${userId}`);
+    // JWT will identify the user from the token - no need to pass userId
+    return this.http.get<Booking[]>(this.apiUrl);
+  }
+
+  cancelBooking(bookingId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${bookingId}`);
   }
 }

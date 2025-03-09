@@ -1,0 +1,87 @@
+<div class="bookings-container">
+  <div class="header">
+    <h1>Your Bookings</h1>
+    <div class="user-info" *ngIf="user">
+      <span>Welcome, {{ user.firstName }}!</span>
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="User menu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading your bookings...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && error" class="error-container">
+    <mat-icon class="error-icon">error_outline</mat-icon>
+    <h2>Oops! Something went wrong</h2>
+    <p>We couldn't load your bookings at this time.</p>
+    <div class="actions">
+      <button mat-raised-button color="primary" (click)="loadBookings()">
+        Try Again
+      </button>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div
+    *ngIf="!isLoading && !error && bookings.length === 0"
+    class="empty-container"
+  >
+    <mat-icon class="empty-icon">event_busy</mat-icon>
+    <h2>No Bookings Yet</h2>
+    <p>
+      You haven't made any bookings yet. Ready to schedule your first
+      appointment?
+    </p>
+    <button mat-raised-button color="primary" (click)="createNewBooking()">
+      Book Now
+    </button>
+  </div>
+
+  <!-- Bookings List -->
+  <div
+    *ngIf="!isLoading && !error && bookings.length > 0"
+    class="bookings-list"
+  >
+    <div class="add-booking">
+      <button mat-raised-button color="primary" (click)="createNewBooking()">
+        <mat-icon>add</mat-icon> New Booking
+      </button>
+    </div>
+
+    <div class="booking-cards">
+      <mat-card *ngFor="let booking of bookings" class="booking-card">
+        <mat-card-header>
+          <mat-card-title>{{ booking.serviceRequired }}</mat-card-title>
+          <mat-card-subtitle
+            >{{ formatDate(booking.date) }} at
+            {{ booking.time }}</mat-card-subtitle
+          >
+        </mat-card-header>
+        <mat-card-content>
+          <p><mat-icon>location_on</mat-icon> {{ booking.location }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button
+            mat-button
+            color="primary"
+            [routerLink]="['/booking-details', booking.id]"
+          >
+            View Details
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>

@@ -1,15 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from '../Service/user.service';
+import { BookingService } from '../Service/booking.service';
+import { catchError, forkJoin, throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { SnackbarService } from '../Service/snackbar.service';
+import { AuthService } from '../Service/auth.service';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 interface UserDetails {
+  id?: number;
   firstName: string;
   lastName: string;
   email: string;
 }
 
 interface BookingDetails {
+  id?: number;
   location: string;
   date: string;
   time: string;
@@ -24,27 +32,81 @@ interface BookingDetails {
 export class ConfirmationComponent implements OnInit {
   userDetails: UserDetails = {} as UserDetails;
   bookingDetails: BookingDetails = {} as BookingDetails;
+  isLoading = true;
+  error = false;
 
   // Define colors
   private readonly primaryColor = '#673ab7';
   private readonly secondaryColor = '#444444';
 
-  constructor(private router: Router) {
-    if (sessionStorage.getItem('sessionActive') === null) {
-      const hasExistingBooking = localStorage.getItem('userDetails') !== null;
-      if (!hasExistingBooking) {
-        this.router.navigate(['create-acount']);
-      }
+  constructor(
+    public router: Router,
+    private userService: UserService,
+    private bookingService: BookingService,
+    private authService: AuthService,
+    private snackbarService: SnackbarService
+  ) {
+    // Check if the user is logged in
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
     }
-
-    sessionStorage.setItem('sessionActive', 'true');
   }
 
   ngOnInit() {
-    this.userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}');
-    this.bookingDetails = JSON.parse(
-      localStorage.getItem('bookingDetails') || '{}'
-    );
+    this.loadData();
+  }
+
+  loadData() {
+    // No need to get userId from localStorage as we're using JWT
+    this.isLoading = true;
+    this.error = false;
+
+    // Get user and booking details using JWT authentication
+    forkJoin({
+      user: this.userService.getCurrentUser(),
+      bookings: this.bookingService.getUserBookings(),
+    })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          this.isLoading = false;
+          this.error = true;
+          this.snackbarService.showError(
+            'Failed to load booking details. Please try again.',
+            'OK'
+          );
+          console.error('Error loading confirmation data:', error);
+          return throwError(() => error);
+        })
+      )
+      .subscribe(({ user, bookings }) => {
+        this.isLoading = false;
+
+        // Set user details
+        this.userDetails = {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+        };
+
+        // Set booking details (assuming the latest booking is what we want to show)
+        if (bookings && bookings.length > 0) {
+          const latestBooking = bookings[bookings.length - 1];
+          this.bookingDetails = {
+            id: latestBooking.id,
+            location: latestBooking.location,
+            date: latestBooking.date,
+            time: latestBooking.time,
+            serviceRequired: latestBooking.serviceRequired,
+          };
+        } else {
+          this.snackbarService.showError(
+            'No booking found. Please try again.',
+            'OK'
+          );
+          this.error = true;
+        }
+      });
   }
 
   private addHeader(doc: jsPDF) {
@@ -137,14 +199,9 @@ export class ConfirmationComponent implements OnInit {
     // Save the PDF
     doc.save(`booking-confirmation-${new Date().getTime()}.pdf`);
 
-    // Clear all stored data
-    localStorage.removeItem('userDetails');
-    localStorage.removeItem('bookingDetails');
-    sessionStorage.removeItem('sessionActive');
-
-    // Redirect to create account page
+    // Redirect to login page after a short delay
     setTimeout(() => {
-      this.router.navigate(['/homepage']);
+      this.router.navigate(['/user-bookings']);
     }, 1000);
   }
 }

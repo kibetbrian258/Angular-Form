@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 export interface UserRegistrationDTO {
   firstName: string;
@@ -24,20 +24,19 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  registerUser(userData: UserRegistrationDTO): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/register`, userData).pipe(
-      tap((user) => {
-        // Save user ID to localStorage for later use
-        localStorage.setItem('userId', user.id.toString());
-      })
-    );
+  // This method is now handled by the AuthService
+
+  // registerUser(userData: UserRegistrationDTO): Observable<User> {
+  //   return this.http.post<User>(`${this.apiUrl}/register`, userData);
+  // }
+
+  getCurrentUser(): Observable<User> {
+    // Get the profile of the currently authenticated user
+    return this.http.get<User>(`${this.apiUrl}/profile`);
   }
 
-  getUser(userId: number): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/${userId}`);
-  }
-
-  deleteUser(userId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${userId}`);
+  deleteCurrentUser(): Observable<void> {
+    // Delete the currently authenticated user
+    return this.http.delete<void>(`${this.apiUrl}/profile`);
   }
 }

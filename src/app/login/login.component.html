@@ -43,11 +43,9 @@
             class="toggle-password"
             (click)="togglePasswordVisibility()"
           >
-            <i
-              class="fas"
-              [class.fa-eye]="!showPassword"
-              [class.fa-eye-slash]="showPassword"
-            ></i>
+            <mat-icon>{{
+              showPassword ? "visibility_off" : "visibility"
+            }}</mat-icon>
           </button>
         </div>
         <div
@@ -61,8 +59,17 @@
         </div>
       </div>
 
-      <button type="submit" class="login-button" [disabled]="loginForm.invalid">
-        Sign In
+      <button
+        type="submit"
+        class="login-button"
+        [disabled]="loginForm.invalid || isLoading"
+      >
+        <mat-spinner
+          *ngIf="isLoading"
+          diameter="20"
+          class="spinner-button"
+        ></mat-spinner>
+        <span *ngIf="!isLoading">Sign In</span>
       </button>
     </form>
 
@@ -70,6 +77,6 @@
       <span>New to Bolane?</span>
     </div>
 
-    <button routerLink="/booking" class="book-now-button">Book Now</button>
+    <button routerLink="/registration" class="book-now-button">Book Now</button>
   </div>
 </div>

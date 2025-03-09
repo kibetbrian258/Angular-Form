@@ -1,0 +1,133 @@
+<!-- booking.component.html -->
+<div class="page-container">
+  <div class="form-card mat-elevation-z4">
+    <h2>Book a Service</h2>
+    <p class="subtitle">Complete the form below to schedule your appointment</p>
+
+    <div *ngIf="user" class="user-info">
+      <p>
+        Booking as: <strong>{{ user.firstName }} {{ user.lastName }}</strong>
+      </p>
+    </div>
+
+    <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+      <div class="form-fields-container">
+        <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Location</mat-label>
+            <mat-select formControlName="location" required>
+              <mat-option
+                *ngFor="let location of locations"
+                [value]="location.name"
+              >
+                {{ location.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="bookingForm.get('location')?.hasError('required')"
+            >
+              Location is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Service Required</mat-label>
+            <mat-select formControlName="serviceRequired" required>
+              <mat-option
+                *ngFor="let service of availableServices"
+                [value]="service.name"
+              >
+                {{ service.name }} - Ksh {{ service.price }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="bookingForm.get('serviceRequired')?.hasError('required')"
+            >
+              Service is required
+            </mat-error>
+            <mat-hint
+              *ngIf="
+                availableServices.length === 0 && bookingForm.get('date')?.value
+              "
+            >
+              No services available on selected date
+            </mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [min]="minDate"
+              [max]="maxDate"
+              [matDatepickerFilter]="dateFilter"
+              formControlName="date"
+              placeholder="Select date"
+              required
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="bookingForm.get('date')?.hasError('required')">
+              Date is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Time Slot</mat-label>
+            <mat-select formControlName="time" required>
+              <mat-option
+                *ngFor="let slot of availableTimeSlots"
+                [value]="slot.value"
+              >
+                {{ slot.display }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="bookingForm.get('time')?.hasError('required')">
+              Time is required
+            </mat-error>
+            <mat-hint
+              *ngIf="
+                availableTimeSlots.length === 0 &&
+                bookingForm.get('date')?.value
+              "
+            >
+              No time slots available on selected date
+            </mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="
+            !bookingForm.valid ||
+            isLoading ||
+            availableServices.length === 0 ||
+            availableTimeSlots.length === 0
+          "
+          class="submit-button"
+        >
+          <mat-spinner
+            *ngIf="isLoading"
+            diameter="20"
+            class="spinner-button"
+          ></mat-spinner>
+          <span *ngIf="!isLoading">Book Now</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

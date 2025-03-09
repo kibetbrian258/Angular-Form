@@ -1,0 +1,731 @@
+<!-- service-availability-management.component.html -->
+<div class="service-availability-management">
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>{{
+        isEditing ? "Edit Service Availability" : "Add New Service Availability"
+      }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form
+        [formGroup]="availabilityForm"
+        (ngSubmit)="onSubmit()"
+        class="availability-form"
+      >
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Service</mat-label>
+            <mat-select formControlName="serviceId" required>
+              <mat-option *ngFor="let service of services" [value]="service.id">
+                {{ service.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="availabilityForm.get('serviceId')?.hasError('required')"
+            >
+              Service is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [min]="minDate"
+              formControlName="date"
+              required
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error
+              *ngIf="availabilityForm.get('date')?.hasError('required')"
+            >
+              Date is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <div class="status-toggle full-width">
+            <mat-slide-toggle formControlName="available" color="primary">
+              Available for Booking
+            </mat-slide-toggle>
+          </div>
+        </div>
+
+        <!-- Time Slots Section -->
+        <div class="time-slots-section">
+          <h3>Time Slots</h3>
+          <p class="instruction-text">
+            Define available time slots for this service on the selected date.
+            <strong
+              >Each time slot can have its own maximum booking limit.</strong
+            >
+          </p>
+
+          <div formArrayName="timeSlots">
+            <div
+              *ngFor="let timeSlot of timeSlots.controls; let i = index"
+              [formGroupName]="i"
+              class="time-slot-container"
+            >
+              <div class="time-slot-row">
+                <mat-form-field appearance="outline" class="time-input">
+                  <mat-label>Start Time</mat-label>
+                  <input
+                    matInput
+                    type="time"
+                    formControlName="startTime"
+                    required
+                  />
+                  <mat-error
+                    *ngIf="timeSlot.get('startTime')?.hasError('required')"
+                  >
+                    Start time is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="time-input">
+                  <mat-label>End Time</mat-label>
+                  <input
+                    matInput
+                    type="time"
+                    formControlName="endTime"
+                    required
+                  />
+                  <mat-error
+                    *ngIf="timeSlot.get('endTime')?.hasError('required')"
+                  >
+                    End time is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="slot-booking-input">
+                  <mat-label>Max Bookings</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="maxBookings"
+                    min="1"
+                    required
+                  />
+                  <mat-error
+                    *ngIf="timeSlot.get('maxBookings')?.hasError('required')"
+                  >
+                    Maximum bookings is required
+                  </mat-error>
+                  <mat-error
+                    *ngIf="timeSlot.get('maxBookings')?.hasError('min')"
+                  >
+                    Maximum bookings must be at least 1
+                  </mat-error>
+                </mat-form-field>
+
+                <div class="time-slot-toggle">
+                  <mat-slide-toggle formControlName="available" color="primary">
+                    Available
+                  </mat-slide-toggle>
+                </div>
+
+                <button
+                  mat-icon-button
+                  color="warn"
+                  type="button"
+                  (click)="removeTimeSlot(i)"
+                  matTooltip="Remove time slot"
+                >
+                  <mat-icon>remove_circle</mat-icon>
+                </button>
+              </div>
+
+              <mat-error
+                *ngIf="timeSlot.hasError('timeRangeInvalid')"
+                class="time-range-error"
+              >
+                End time must be after start time
+              </mat-error>
+
+              <mat-error
+                *ngIf="timeSlot.hasError('timeOverlap')"
+                class="time-range-error"
+              >
+                Time slot overlaps with another slot
+              </mat-error>
+            </div>
+          </div>
+
+          <button
+            mat-stroked-button
+            type="button"
+            color="primary"
+            (click)="addTimeSlot()"
+            class="add-time-slot-btn"
+          >
+            <mat-icon>add</mat-icon> Add Time Slot
+          </button>
+
+          <div *ngIf="timeSlots.length === 0" class="no-time-slots-warning">
+            <mat-icon color="warn">warning</mat-icon>
+            <span>At least one time slot is recommended for bookings</span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="resetForm()"
+            [disabled]="isLoading"
+          >
+            Cancel
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="availabilityForm.invalid || isLoading"
+          >
+            <mat-spinner
+              *ngIf="isLoading"
+              diameter="20"
+              class="button-spinner"
+            ></mat-spinner>
+            <span *ngIf="!isLoading"
+              >{{ isEditing ? "Update" : "Create" }} Service Availability</span
+            >
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="availabilities-list">
+    <h2>Service Availabilities</h2>
+
+    <div class="loading-container" *ngIf="isLoading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <div class="table-container" *ngIf="!isLoading">
+      <table
+        mat-table
+        [dataSource]="serviceAvailabilities"
+        class="availabilities-table"
+        matSort
+        multiTemplateDataRows
+      >
+        <!-- Service Column -->
+        <ng-container matColumnDef="service">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Service</th>
+          <td mat-cell *matCellDef="let availability">
+            {{ availability.service?.name || "Unknown Service" }}
+          </td>
+        </ng-container>
+
+        <!-- Date Column -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+          <td mat-cell *matCellDef="let availability">
+            {{ formatDateDisplay(availability.date) }}
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let availability">
+            <span
+              class="status"
+              [ngClass]="availability.available ? 'active' : 'inactive'"
+            >
+              {{ availability.available ? "Available" : "Unavailable" }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Bookings Column -->
+        <ng-container matColumnDef="bookings">
+          <th mat-header-cell *matHeaderCellDef>Total Bookings</th>
+          <td mat-cell *matCellDef="let availability">
+            <div class="bookings-display">
+              <span>{{ availability.currentBookings || 0 }}</span>
+              <span
+                *ngIf="isAtCapacity(availability)"
+                class="capacity-warning"
+                matTooltip="Maximum bookings reached"
+              >
+                <mat-icon>warning</mat-icon>
+              </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Time Slots Column -->
+        <ng-container matColumnDef="timeSlots">
+          <th mat-header-cell *matHeaderCellDef>Time Slots</th>
+          <td mat-cell *matCellDef="let availability">
+            <div class="time-slots-preview">
+              <div
+                *ngIf="
+                  !availability.timeSlots || availability.timeSlots.length === 0
+                "
+                class="no-time-slots"
+              >
+                <span class="muted-text">No time slots defined</span>
+              </div>
+
+              <div
+                *ngIf="
+                  availability.timeSlots && availability.timeSlots.length > 0
+                "
+                class="time-slots-summary"
+              >
+                <div class="slots-badge" matTooltip="Number of time slots">
+                  <mat-icon class="small-icon">schedule</mat-icon>
+                  <span>{{ availability.timeSlots.length }}</span>
+                </div>
+
+                <div
+                  class="capacity-badge"
+                  matTooltip="Total capacity across all time slots"
+                >
+                  <mat-icon class="small-icon">people</mat-icon>
+                  <span>{{ getTotalCapacity(availability) }}</span>
+                </div>
+
+                <div class="slots-list">
+                  <ng-container *ngIf="availability.timeSlots">
+                    <div
+                      *ngFor="let slot of availability.timeSlots.slice(0, 3)"
+                      class="slot-preview"
+                      [ngClass]="{
+                        'slot-available': slot.available,
+                        'slot-unavailable': !slot.available
+                      }"
+                    >
+                      {{ formatTime(slot.startTime) }} -
+                      {{ formatTime(slot.endTime) }}
+                      <span class="slot-bookings"
+                        >{{ slot.currentBookings || 0 }}/{{
+                          slot.maxBookings
+                        }}</span
+                      >
+                    </div>
+                    <div
+                      *ngIf="availability.timeSlots.length > 3"
+                      class="more-slots"
+                    >
+                      + {{ availability.timeSlots.length - 3 }} more
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+
+              <button
+                mat-button
+                color="primary"
+                (click)="
+                  toggleTimeSlotDetails(availability); $event.stopPropagation()
+                "
+              >
+                {{
+                  isTimeSlotExpanded(availability)
+                    ? "Hide Details"
+                    : "View Details"
+                }}
+                <mat-icon>{{
+                  isTimeSlotExpanded(availability)
+                    ? "keyboard_arrow_up"
+                    : "keyboard_arrow_down"
+                }}</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let availability">
+            <div class="actions-container">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="
+                  editAvailability(availability); $event.stopPropagation()
+                "
+                matTooltip="Edit"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                [color]="availability.available ? 'warn' : 'primary'"
+                (click)="
+                  toggleAvailability(availability.id); $event.stopPropagation()
+                "
+                [matTooltip]="
+                  availability.available ? 'Make Unavailable' : 'Make Available'
+                "
+              >
+                <mat-icon>{{
+                  availability.available ? "visibility_off" : "visibility"
+                }}</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="
+                  deleteAvailability(availability.id); $event.stopPropagation()
+                "
+                matTooltip="Delete"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Expanded Time Slots Column -->
+        <ng-container matColumnDef="expandedTimeSlots">
+          <td
+            mat-cell
+            *matCellDef="let availability"
+            [attr.colspan]="displayedColumns.length"
+          >
+            <div
+              class="time-slots-detail"
+              [@detailExpand]="
+                isTimeSlotExpanded(availability) ? 'expanded' : 'collapsed'
+              "
+              [style.display]="isTimeSlotExpanded(availability) ? '' : 'none'"
+            >
+              <div
+                *ngIf="
+                  !availability.timeSlots || availability.timeSlots.length === 0
+                "
+                class="no-timeslots"
+              >
+                <p>No time slots defined for this service on this date.</p>
+                <button
+                  mat-stroked-button
+                  color="primary"
+                  (click)="addTimeSlotToExisting(availability)"
+                >
+                  <mat-icon>add</mat-icon> Add Time Slot
+                </button>
+              </div>
+
+              <!-- Replace the expanded time slots table with this enhanced version -->
+              <table
+                mat-table
+                [dataSource]="availability.timeSlots || []"
+                class="time-slots-table"
+                *ngIf="
+                  availability.timeSlots && availability.timeSlots.length > 0
+                "
+              >
+                <!-- Start Time Column -->
+                <ng-container matColumnDef="startTime">
+                  <th mat-header-cell *matHeaderCellDef>Start Time</th>
+                  <td mat-cell *matCellDef="let timeSlot">
+                    {{ formatTime(timeSlot.startTime) }}
+                  </td>
+                </ng-container>
+
+                <!-- End Time Column -->
+                <ng-container matColumnDef="endTime">
+                  <th mat-header-cell *matHeaderCellDef>End Time</th>
+                  <td mat-cell *matCellDef="let timeSlot">
+                    {{ formatTime(timeSlot.endTime) }}
+                  </td>
+                </ng-container>
+
+                <!-- Duration Column -->
+                <ng-container matColumnDef="duration">
+                  <th mat-header-cell *matHeaderCellDef>Duration</th>
+                  <td mat-cell *matCellDef="let timeSlot">
+                    {{
+                      calculateDuration(timeSlot.startTime, timeSlot.endTime)
+                    }}
+                  </td>
+                </ng-container>
+
+                <!-- Time Slot Status Column -->
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef>Status</th>
+                  <td mat-cell *matCellDef="let timeSlot">
+                    <span
+                      class="status"
+                      [ngClass]="timeSlot.available ? 'active' : 'inactive'"
+                    >
+                      {{ timeSlot.available ? "Available" : "Unavailable" }}
+                    </span>
+                  </td>
+                </ng-container>
+
+                <!-- Time Slot Bookings Column -->
+                <ng-container matColumnDef="bookings">
+                  <th mat-header-cell *matHeaderCellDef>Bookings</th>
+                  <td mat-cell *matCellDef="let timeSlot">
+                    <div class="bookings-display">
+                      <div class="booking-progress">
+                        <mat-progress-bar
+                          [value]="
+                            (timeSlot.currentBookings / timeSlot.maxBookings) *
+                            100
+                          "
+                          [color]="
+                            timeSlot.currentBookings >= timeSlot.maxBookings
+                              ? 'warn'
+                              : 'primary'
+                          "
+                        ></mat-progress-bar>
+                      </div>
+                      <span class="booking-text"
+                        >{{ timeSlot.currentBookings || 0 }} /
+                        {{ timeSlot.maxBookings }}</span
+                      >
+                      <span
+                        *ngIf="timeSlot.currentBookings >= timeSlot.maxBookings"
+                        class="capacity-warning"
+                        matTooltip="Maximum bookings reached"
+                      >
+                        <mat-icon>warning</mat-icon>
+                      </span>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <!-- Time Slot Actions Column -->
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef>Actions</th>
+                  <td mat-cell *matCellDef="let timeSlot">
+                    <div class="actions-container">
+                      <button
+                        mat-icon-button
+                        color="primary"
+                        (click)="editTimeSlot(timeSlot, availability)"
+                        matTooltip="Edit"
+                      >
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button
+                        mat-icon-button
+                        [color]="timeSlot.available ? 'warn' : 'primary'"
+                        (click)="toggleTimeSlotAvailability(timeSlot.id)"
+                        [matTooltip]="
+                          timeSlot.available
+                            ? 'Make Unavailable'
+                            : 'Make Available'
+                        "
+                      >
+                        <mat-icon>{{
+                          timeSlot.available ? "visibility_off" : "visibility"
+                        }}</mat-icon>
+                      </button>
+                      <button
+                        mat-icon-button
+                        color="warn"
+                        (click)="deleteTimeSlot(timeSlot.id)"
+                        matTooltip="Delete"
+                        [disabled]="timeSlot.currentBookings > 0"
+                      >
+                        <mat-icon>delete</mat-icon>
+                      </button>
+
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        *ngIf="timeSlot.currentBookings >= timeSlot.maxBookings"
+                        (click)="increaseMaxBookings(timeSlot)"
+                        matTooltip="Increase maximum bookings"
+                      >
+                        <mat-icon>add_circle</mat-icon>
+                      </button>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="expandedTimeSlotColumns"
+                ></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: expandedTimeSlotColumns"
+                ></tr>
+              </table>
+
+              <div
+                class="time-slot-actions"
+                *ngIf="
+                  availability.timeSlots && availability.timeSlots.length > 0
+                "
+              >
+                <button
+                  mat-stroked-button
+                  color="primary"
+                  (click)="addTimeSlotToExisting(availability)"
+                >
+                  <mat-icon>add</mat-icon> Add Time Slot
+                </button>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="availability-row"
+          [class.expanded-row]="isTimeSlotExpanded(row)"
+          (click)="toggleTimeSlotDetails(row)"
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="
+            let row;
+            columns: ['expandedTimeSlots'];
+            when: isExpansionDetailRow
+          "
+          class="detail-row"
+        ></tr>
+      </table>
+    </div>
+
+    <div
+      class="capacity-management"
+      *ngIf="serviceAtCapacity.length > 0 && !isCapacityWarningDismissed"
+    >
+      <div class="capacity-warning-banner">
+        <div class="warning-content">
+          <mat-icon>warning</mat-icon>
+          <span
+            >{{ serviceAtCapacity.length }} service(s) have reached maximum
+            capacity</span
+          >
+        </div>
+        <div class="warning-actions">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="handleCapacityServices()"
+          >
+            Increase Capacity
+          </button>
+          <button
+            mat-icon-button
+            class="close-button"
+            (click)="dismissCapacityWarning()"
+            matTooltip="Dismiss notification"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="no-data"
+      *ngIf="!isLoading && serviceAvailabilities.length === 0"
+    >
+      <p>
+        No service availabilities found. Create your first service availability
+        above.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Time Slot Dialog -->
+<ng-template #timeSlotDialog>
+  <h2 mat-dialog-title>
+    {{ editingTimeSlot ? "Edit Time Slot" : "Add Time Slot" }}
+  </h2>
+
+  <form [formGroup]="timeSlotForm" (ngSubmit)="submitTimeSlot()">
+    <mat-dialog-content>
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Start Time</mat-label>
+          <input matInput type="time" formControlName="startTime" required />
+          <mat-error
+            *ngIf="timeSlotForm.get('startTime')?.hasError('required')"
+          >
+            Start time is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>End Time</mat-label>
+          <input matInput type="time" formControlName="endTime" required />
+          <mat-error *ngIf="timeSlotForm.get('endTime')?.hasError('required')">
+            End time is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Maximum Bookings</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="maxBookings"
+            min="1"
+            required
+          />
+          <mat-error
+            *ngIf="timeSlotForm.get('maxBookings')?.hasError('required')"
+          >
+            Maximum bookings is required
+          </mat-error>
+          <mat-error *ngIf="timeSlotForm.get('maxBookings')?.hasError('min')">
+            Maximum bookings must be at least 1
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-slide-toggle formControlName="available" color="primary">
+          Available for Booking
+        </mat-slide-toggle>
+      </div>
+
+      <mat-error
+        *ngIf="timeSlotForm.hasError('timeRangeInvalid')"
+        class="time-range-error"
+      >
+        End time must be after start time
+      </mat-error>
+
+      <mat-error
+        *ngIf="timeSlotForm.hasError('timeOverlap')"
+        class="time-range-error"
+      >
+        Time slot overlaps with another slot
+      </mat-error>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancel</button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="timeSlotForm.invalid"
+      >
+        {{ editingTimeSlot ? "Update" : "Add" }}
+      </button>
+    </mat-dialog-actions>
+  </form>
+</ng-template>

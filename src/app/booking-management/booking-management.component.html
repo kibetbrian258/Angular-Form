@@ -1,0 +1,166 @@
+<div class="booking-management">
+  <div class="bookings-list">
+    <h2>Bookings</h2>
+
+    <div class="filters">
+      <mat-form-field appearance="outline">
+        <mat-label>Filter by Date</mat-label>
+        <input matInput [matDatepicker]="picker" [formControl]="dateFilter" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Filter by Service</mat-label>
+        <mat-select [formControl]="serviceFilter">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let service of services" [value]="service">
+            {{ service }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Filter by Client</mat-label>
+        <mat-select [formControl]="clientFilter">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let client of clients" [value]="client.id">
+            {{ client.name }} ({{ getClientBookingCount(client.id) }} bookings)
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-stroked-button
+        color="primary"
+        (click)="clearFilters()"
+        class="clear-button"
+      >
+        Clear Filters
+      </button>
+    </div>
+
+    <div class="loading-container" *ngIf="isLoading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      matSortActive="date"
+      matSortDirection="desc"
+      class="bookings-table"
+      *ngIf="!isLoading"
+    >
+      <!-- Date Group Header Row -->
+      <ng-container matColumnDef="dateGroup">
+        <td
+          mat-cell
+          *matCellDef="let item"
+          [attr.colspan]="displayedColumns.length"
+          class="date-group-cell"
+        >
+          <div class="date-group-header">
+            {{ item.groupName }}
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+        <td mat-cell *matCellDef="let item">{{ item.booking?.id }}</td>
+      </ng-container>
+
+      <!-- Client Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Client</th>
+        <td mat-cell *matCellDef="let item">
+          <div class="client-info" *ngIf="item.booking?.user">
+            <div class="client-name">
+              {{ item.booking.user.firstName }} {{ item.booking.user.lastName }}
+              <span
+                class="booking-count"
+                *ngIf="getClientBookingCount(item.booking.user.id) > 1"
+              >
+                ({{ getClientBookingCount(item.booking.user.id) }} bookings)
+              </span>
+            </div>
+            <div class="client-email">{{ item.booking.user.email }}</div>
+          </div>
+          <div *ngIf="!item.booking?.user" class="missing-data">
+            Client information unavailable
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Service Column -->
+      <ng-container matColumnDef="service">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Service</th>
+        <td mat-cell *matCellDef="let item">
+          {{ item.booking?.serviceRequired }}
+        </td>
+      </ng-container>
+
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+        <td mat-cell *matCellDef="let item">
+          {{ item.booking?.date ? formatDate(item.booking.date) : "" }}
+        </td>
+      </ng-container>
+
+      <!-- Time Column -->
+      <ng-container matColumnDef="time">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
+        <td mat-cell *matCellDef="let item">
+          {{ item.booking?.time ? formatTime(item.booking.time) : "" }}
+        </td>
+      </ng-container>
+
+      <!-- Location Column -->
+      <ng-container matColumnDef="location">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Location</th>
+        <td mat-cell *matCellDef="let item">{{ item.booking?.location }}</td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let item">
+          <button
+            *ngIf="item.booking"
+            mat-icon-button
+            color="warn"
+            (click)="cancelBooking(item.booking.id)"
+            matTooltip="Cancel Booking"
+          >
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Header Row -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+      <!-- Date Group Row -->
+      <tr
+        mat-row
+        *matRowDef="let row; columns: ['dateGroup']; when: isDateGroup"
+        class="date-group-row"
+      ></tr>
+
+      <!-- Booking Data Row -->
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns; when: isBookingRow"
+        class="booking-row"
+      ></tr>
+    </table>
+
+    <div class="no-data" *ngIf="!isLoading && dataSource.data.length === 0">
+      <p>No bookings found.</p>
+    </div>
+  </div>
+</div>
