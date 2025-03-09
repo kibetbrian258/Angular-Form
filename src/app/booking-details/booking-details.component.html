@@ -1,0 +1,214 @@
+<div class="booking-details-container">
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading booking details...</p>
+  </div>
+
+  <div class="content-container" *ngIf="!isLoading && booking">
+    <div class="header-section">
+      <button mat-icon-button color="primary" [routerLink]="['/user-bookings']">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h2>Booking Details</h2>
+    </div>
+
+    <!-- View Mode -->
+    <div class="details-card mat-elevation-z4" *ngIf="!isEditing">
+      <div class="booking-header">
+        <div class="booking-service">
+          <mat-icon class="service-icon">spa</mat-icon>
+          <h3>{{ booking.serviceRequired }}</h3>
+        </div>
+        <div class="booking-id">Booking #{{ booking.id }}</div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="booking-info">
+        <div class="info-row">
+          <div class="info-label">
+            <mat-icon>event</mat-icon>
+            <span>Date</span>
+          </div>
+          <div class="info-value">
+            {{ booking.date | date : "EEEE, MMMM d, yyyy" }}
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">
+            <mat-icon>access_time</mat-icon>
+            <span>Time</span>
+          </div>
+          <div class="info-value">
+            {{ formatTimeForDisplay(booking.time) }}
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">
+            <mat-icon>location_on</mat-icon>
+            <span>Location</span>
+          </div>
+          <div class="info-value">{{ booking.location }}</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">
+            <mat-icon>event_note</mat-icon>
+            <span>Booked On</span>
+          </div>
+          <div class="info-value">
+            {{ booking.createdAt | date : "MMM d, yyyy, h:mm a" }}
+          </div>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="booking-actions">
+        <button mat-stroked-button color="primary" (click)="toggleEdit()">
+          <mat-icon>edit</mat-icon>
+          Edit Booking
+        </button>
+        <button mat-stroked-button color="warn" (click)="cancelBooking()">
+          <mat-icon>cancel</mat-icon>
+          Cancel Booking
+        </button>
+      </div>
+
+      <div class="booking-note">
+        <mat-icon>info</mat-icon>
+        <p>
+          Please arrive 10 minutes before your scheduled appointment. For any
+          changes less than 24 hours before your appointment, please contact us
+          directly.
+        </p>
+      </div>
+    </div>
+
+    <!-- Edit Mode -->
+    <div class="edit-card mat-elevation-z4" *ngIf="isEditing">
+      <div class="edit-header">
+        <h3>Edit Booking</h3>
+        <p>Make changes to your booking details below</p>
+      </div>
+
+      <form [formGroup]="editForm" (ngSubmit)="saveChanges()">
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Location</mat-label>
+            <mat-select formControlName="location" required>
+              <mat-option
+                *ngFor="let location of locations"
+                [value]="location.name"
+              >
+                {{ location.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="editForm.get('location')?.hasError('required')">
+              Location is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Service Required</mat-label>
+            <mat-select formControlName="serviceRequired" required>
+              <mat-option
+                *ngFor="let service of services"
+                [value]="service.name"
+              >
+                {{ service.name }} - Ksh {{ service.price }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="editForm.get('serviceRequired')?.hasError('required')"
+            >
+              Service is required
+            </mat-error>
+            <mat-hint
+              *ngIf="
+                availableTimeSlots.length === 0 && editForm.get('date')?.value
+              "
+            >
+              No services available on selected date
+            </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [min]="minDate"
+              [max]="maxDate"
+              [matDatepickerFilter]="dateFilter"
+              formControlName="date"
+              placeholder="Select date"
+              required
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="editForm.get('date')?.hasError('required')">
+              Date is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Time Slot</mat-label>
+            <mat-select formControlName="time" required>
+              <mat-option
+                *ngFor="let slot of availableTimeSlots"
+                [value]="slot.value"
+              >
+                {{ slot.display }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="editForm.get('time')?.hasError('required')">
+              Time is required
+            </mat-error>
+            <mat-hint
+              *ngIf="
+                availableTimeSlots.length === 0 && editForm.get('date')?.value
+              "
+            >
+              No time slots available on selected date
+            </mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-stroked-button type="button" (click)="toggleEdit()">
+            Cancel
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!editForm.valid || isLoading"
+          >
+            <mat-spinner
+              *ngIf="isLoading"
+              diameter="20"
+              class="button-spinner"
+            ></mat-spinner>
+            <span *ngIf="!isLoading">Save Changes</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Not Found Message -->
+  <div class="not-found-container" *ngIf="!isLoading && !booking">
+    <mat-icon>search_off</mat-icon>
+    <h3>Booking Not Found</h3>
+    <p>We couldn't find the booking you're looking for.</p>
+    <button mat-raised-button color="primary" [routerLink]="['/user-bookings']">
+      Back to Your Bookings
+    </button>
+  </div>
+</div>

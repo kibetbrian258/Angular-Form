@@ -15,6 +15,13 @@ export interface Booking {
   time: string;
   date: string;
   serviceRequired: string;
+  createdAt?: string;
+  user?: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
 }
 
 @Injectable({
@@ -28,6 +35,17 @@ export class BookingService {
   createBooking(bookingData: BookingRequestDTO): Observable<Booking> {
     // No need to manually set headers - JWT interceptor will handle this
     return this.http.post<Booking>(this.apiUrl, bookingData);
+  }
+
+  updateBooking(
+    bookingId: number,
+    bookingData: BookingRequestDTO
+  ): Observable<Booking> {
+    return this.http.put<Booking>(`${this.apiUrl}/${bookingId}`, bookingData);
+  }
+
+  getBookingById(bookingId: number): Observable<Booking> {
+    return this.http.get<Booking>(`${this.apiUrl}/${bookingId}`);
   }
 
   getUserBookings(): Observable<Booking[]> {

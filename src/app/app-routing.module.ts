@@ -8,6 +8,7 @@ import { TermsComponent } from './terms/terms.component';
 import { UserBookingsComponent } from './user-bookings/user-bookings.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { BookingComponent } from './booking/booking.component';
+import { BookingDetailsComponent } from './booking-details/booking-details.component';
 import { AuthGuard } from './Guards/auth.guard';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { ServiceManagementComponent } from './service-management/service-management.component';
@@ -36,13 +37,18 @@ const routes: Routes = [
     component: UserBookingsComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'booking-details/:id',
+    component: BookingDetailsComponent,
+    canActivate: [AuthGuard],
+  },
 
-  // Admin specific routes - only using AdminGuard
+  // Admin specific routes
   { path: 'admin-login', component: AdminLoginComponent },
   {
     path: 'admin',
     component: AdminDashboardComponent,
-    canActivate: [AdminGuard], // Use only AdminGuard here
+    canActivate: [AdminGuard],
     children: [
       { path: 'services', component: ServiceManagementComponent },
       { path: 'locations', component: LocationManagementComponent },

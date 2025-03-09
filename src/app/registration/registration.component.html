@@ -89,12 +89,67 @@
             >
               Password is required
             </mat-error>
-            <mat-error
-              *ngIf="registrationForm.get('password')?.hasError('minlength')"
-            >
-              Password must be at least 6 characters
-            </mat-error>
           </mat-form-field>
+
+          <!-- Password requirements checklist -->
+          <div class="password-requirements">
+            <p class="requirements-title">Password must:</p>
+            <ul class="requirements-list">
+              <li
+                [ngClass]="{
+                  'requirement-met': hasMinLength,
+                  'requirement-not-met': !hasMinLength
+                }"
+              >
+                <mat-icon>{{
+                  hasMinLength ? "check_circle" : "cancel"
+                }}</mat-icon>
+                Be at least 6 characters long
+              </li>
+              <li
+                [ngClass]="{
+                  'requirement-met': hasUppercase,
+                  'requirement-not-met': !hasUppercase
+                }"
+              >
+                <mat-icon>{{
+                  hasUppercase ? "check_circle" : "cancel"
+                }}</mat-icon>
+                Include at least one uppercase letter
+              </li>
+              <li
+                [ngClass]="{
+                  'requirement-met': hasNumber,
+                  'requirement-not-met': !hasNumber
+                }"
+              >
+                <mat-icon>{{ hasNumber ? "check_circle" : "cancel" }}</mat-icon>
+                Include at least one number
+              </li>
+              <li
+                [ngClass]="{
+                  'requirement-met': hasSpecialChar,
+                  'requirement-not-met': !hasSpecialChar
+                }"
+              >
+                <mat-icon>{{
+                  hasSpecialChar ? "check_circle" : "cancel"
+                }}</mat-icon>
+                Include at least one special character (!@#$%^&*()_+)
+              </li>
+              <li
+                [ngClass]="{
+                  'requirement-met': notContainsName,
+                  'requirement-not-met': !notContainsName
+                }"
+              >
+                <mat-icon>{{
+                  notContainsName ? "check_circle" : "cancel"
+                }}</mat-icon>
+                Not contain your name
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div class="form-field">

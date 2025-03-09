@@ -52,6 +52,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
 import { MatSortModule } from '@angular/material/sort';
+import { BookingDetailsComponent } from './booking-details/booking-details.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { MatSortModule } from '@angular/material/sort';
     AdminLoginComponent,
     LocationManagementComponent,
     ServiceAvailabilityManagementComponent,
+    BookingDetailsComponent,
   ],
   imports: [
     BrowserModule,

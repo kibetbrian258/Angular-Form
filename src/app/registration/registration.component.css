@@ -111,6 +111,60 @@ h2 {
   color: #9c27b0;
 }
 
+/* Password requirements styles */
+.password-requirements {
+  background-color: #f8f6ff;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border-left: 3px solid #673ab7;
+}
+
+.requirements-title {
+  font-size: 14px;
+  color: #673ab7;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.requirements-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.requirements-list li {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.requirements-list li mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}
+
+.requirement-met {
+  color: #4caf50 !important;
+}
+
+.requirement-met mat-icon {
+  color: #4caf50;
+}
+
+.requirement-not-met {
+  color: #9e9e9e !important;
+}
+
+.requirement-not-met mat-icon {
+  color: #9e9e9e;
+}
+
 @media (max-width: 768px) {
   .form-fields-container {
     grid-template-columns: 1fr;
